@@ -10,7 +10,7 @@ Grabs the dominant color or a representative color palette from an image.
 
 
 ## Getting started
-
+`//TODO`
 `$ npm install react-native-color-thief --save`
 
 ## Mostly automatic installation
