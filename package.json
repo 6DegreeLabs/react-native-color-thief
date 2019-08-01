@@ -1,0 +1,42 @@
+{
+  "name": "react-native-color-thief",
+  "version": "0.1.0",
+  "description": "color thief for react-native (ios & android)",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "react-native",
+    "react",
+    "ios",
+    "android"
+  ],
+  "title": "React Native Color Thief",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/github_account/react-native-color-thief.git",
+    "baseUrl": "https://github.com/github_account/react-native-color-thief"
+  },
+  "author": {
+    "name": "Likewise, Inc."
+  },
+  "contributors": [
+    {
+      "name": "Salim Hemdani"
+    },
+    {
+      "name": "Brian DeWeese"
+    },
+    {
+      "name": "Jimin Cutrell"
+    }
+  ],
+  "license": "MIT",
+  "licenseFilename": "LICENSE",
+  "readmeFilename": "README.md",
+  "peerDependencies": {
+    "react": "^16.5.0",
+    "react-native": ">=0.59.0 <1.0.x"
+  }
+}
