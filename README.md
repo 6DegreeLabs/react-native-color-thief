@@ -123,4 +123,4 @@ module.exports = ItemDisplayImage;
   
 ## Troubleshooting
 
-1. If you aren't currently using swift in your project, you may need to add a `dummy.swift` file with a bridging header in order to successfully build.
+1. (iOS) If you aren't currently using swift in your project, you may need to add a `dummy.swift` file with a bridging header in order to successfully build.
