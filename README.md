@@ -1,12 +1,8 @@
 # react-native-color-thief
-A react-native iOS API of [ColorThiefSwift](https://github.com/yamoridon/ColorThiefSwift)
 
-`//TODO: Android`
+A React Native node module that grabs the dominant color or a representative color palette from an image uri.
 
-## ColorThiefSwift
-Grabs the dominant color or a representative color palette from an image.
-
-![screen shot](https://github.com/yamoridon/ColorThiefSwift/blob/master/screenshot.png?raw=true "screen shot")
+It's an adapted version of Kazuki Ohara 's [ColorThiefSwift](https://github.com/yamoridon/ColorThiefSwift) and Sven Woltmann's [color-thief-java](https://github.com/SvenWoltmann/color-thief-java) from Lokesh Dhakar's original javascript project [color-thief](https://github.com/lokesh/color-thief/)
 
 
 ## Getting started
@@ -32,7 +28,7 @@ Grabs the dominant color or a representative color palette from an image.
 3. In XCode, in the project navigator, select your project. Add `libRNColorThief.a` to your project's `Build Phases` ➜ `Link Binary With Libraries`
 4. Run your project (`Cmd+R`)
 
-### Android (TODO)
+### Android
 
 1. Open up `android/app/src/main/java/[...]/MainActivity.java`
   - Add `import com.reactlibrary.RNColorThiefPackage;` to the imports at the top of the file
@@ -48,6 +44,7 @@ Grabs the dominant color or a representative color palette from an image.
   	```
 
 ## Usage
+Both `getColor` and `getPalette` return a `Promise`.
 
 ```javascript
 import RNColorThief from 'react-native-color-thief';
