@@ -52,14 +52,14 @@ Grabs the dominant color or a representative color palette from an image.
 ```javascript
 import RNColorThief from 'react-native-color-thief';
 
-// get array of colors
+// get array of color objects [{r,g,b}]
 RNColorThief.getPalette(imageUri,colorCount,quality,includeWhite).then((palette) => {
 	console.log('palette', palette);	
 }).catch((error) => {
 	console.log('error', error);
 });
 
-// get dominant color
+// get dominant color object {r,g,b}
 RNColorThief.getColor(imageUri,quality,includeWhite).then((color) => {
 	console.log('color', color);	
 }).catch((error) => {
