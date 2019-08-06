@@ -57,10 +57,10 @@ public class RNColorThief : NSObject {
              return reject("Error getting dominantColor", nil, nil)
         }
        
-        let colorString = RNColorThief.getRGBA(from: dominantColor);
+        let colorDict = RNColorThief.getRGBDict(from: dominantColor);
         //print(colorString)
         
-        resolve(colorString);
+        resolve(colorDict);
     }
     
 
@@ -89,7 +89,7 @@ public class RNColorThief : NSObject {
             return reject("Error getting palette", nil, nil);
         }
         
-        resolve(palette.map{RNColorThief.getRGBA(from: $0)})
+        resolve(palette.map{RNColorThief.getRGBDict(from: $0)})
     }
     
     /**
@@ -116,6 +116,10 @@ public class RNColorThief : NSObject {
     
     static private func getRGBA(from color: MMCQ.Color) -> String {
         return "rgba(\(color.r),\(color.g),\(color.b),1.0)"
+    }
+    
+    static private func getRGBDict(from color: MMCQ.Color) -> Dictionary<String,Number> {
+        return ["r": color.r, "g": color.g, "b": color.b];
     }
     
     
