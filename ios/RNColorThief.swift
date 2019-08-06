@@ -118,7 +118,7 @@ public class RNColorThief : NSObject {
         return "rgba(\(color.r),\(color.g),\(color.b),1.0)"
     }
     
-    static private func getRGBDict(from color: MMCQ.Color) -> Dictionary<String,Number> {
+    static private func getRGBDict(from color: MMCQ.Color) -> Dictionary<String,UInt8> {
         return ["r": color.r, "g": color.g, "b": color.b];
     }
     
