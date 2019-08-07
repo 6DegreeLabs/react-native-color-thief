@@ -33,7 +33,7 @@ An adapted version of Sven Woltmann's fast [color-thief-java](https://github.com
 ### Android
 
 1. Open up `android/app/src/main/java/[...]/MainActivity.java`
-  - Add `import com.reactlibrary.RNColorThiefPackage;` to the imports at the top of the file
+  - Add `import com.RNColorThief.RNColorThiefPackage;` to the imports at the top of the file
   - Add `new RNColorThiefPackage()` to the list returned by the `getPackages()` method
 2. Append the following lines to `android/settings.gradle`:
   	```
@@ -51,78 +51,21 @@ Both `getColor` and `getPalette` return a `Promise`.
 ```javascript
 import RNColorThief from 'react-native-color-thief';
 
-// get array of color objects [{r,g,b}]
-RNColorThief.getPalette(imageUri,colorCount,quality,includeWhite).then((palette) => {
-	console.log('palette', palette);	
+// get array of color objects [{ r, g, b }]
+RNColorThief.getPalette(imageUri, colorCount, quality, includeWhite).then((palette) => {
+	console.log('palette', palette);
 }).catch((error) => {
 	console.log('error', error);
 });
 
-// get dominant color object {r,g,b}
-RNColorThief.getColor(imageUri,quality,includeWhite).then((color) => {
-	console.log('color', color);	
+// get dominant color object { r, g, b }
+RNColorThief.getColor(imageUri, quality, includeWhite).then((color) => {
+	console.log('color', color);
 }).catch((error) => {
 	console.log('error', error);
 });
-
 ```
 
-## Example
-
-```javascript
-// customImage.js
-
-import {Image,View,StyleSheet} from 'react-native'
-import RNColorThief from 'react-native-color-thief';
-
-const CustomImage = (props:Object) => {
-
-	const {
-		imageUri
-		style,
-		...imageProps
-	} = props;
-
-	const onLoad = ({nativeEvent}) => {
-		// successful load
-		const {source} = nativeEvent;
-		
-		if(	source && 
-			source.url && 
-			typeof source.url === 'string') {
-
-			// get array of colors	
-			RNColorThief.getPalette(source.url,5,1,true).then((palette) => {
-				console.log('palette', palette);	
-			}).catch((error) => {
-				console.log('error', error);
-			});
-
-		}			
-	}
-			
-	return imageUri && typeof imageUri === 'string' ? (
-		<Image 
-			source={{ uri: imageUri }}
-			style={[styles.defaultImageStyle,style]}
-			onLoad={onLoad}
-			{...imageProps}
-		/>
-	) : (<View/>)
-
-}
-
-const styles = StyleSheet.create({
-		defaultImageStyle: {
-			width: '100%',
-			height: '100%',
-			resizeMode: 'contain'
-		}
-	});
-
-module.exports = ItemDisplayImage;
-```
-  
 ## Troubleshooting
 
 1. (iOS) If you aren't currently using swift in your project, you may need to add a `dummy.swift` file with a bridging header in order to successfully build.
