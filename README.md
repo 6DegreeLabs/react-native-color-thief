@@ -2,7 +2,8 @@
 
 A React Native node module that grabs the dominant color or a representative color palette from an image uri.
 
-**Credits**
+## Credits
+
 An adapted version of Sven Woltmann's fast [color-thief-java](https://github.com/SvenWoltmann/color-thief-java) and Kazuki Ohara's [ColorThiefSwift](https://github.com/yamoridon/ColorThiefSwift) from Lokesh Dhakar's original javascript project [color-thief](https://github.com/lokesh/color-thief/)
 
 
