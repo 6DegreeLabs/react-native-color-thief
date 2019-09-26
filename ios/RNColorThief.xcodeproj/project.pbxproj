@@ -10,11 +10,24 @@
 		AA0B8B0622F0E09D001836FD /* MMCQ.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0B8B0422F0E09D001836FD /* MMCQ.swift */; };
 		AA0B8B0822F0E0D2001836FD /* RNColorThief.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0B8B0722F0E0D2001836FD /* RNColorThief.swift */; };
 		AA2EE50B22F3528A00151EAF /* ColorThief.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA2EE50A22F3528A00151EAF /* ColorThief.swift */; };
+		AA7BD0FD233C713000111F1B /* ColorThief.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA2EE50A22F3528A00151EAF /* ColorThief.swift */; };
+		AA7BD0FE233C713000111F1B /* RNColorThief.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0B8B0722F0E0D2001836FD /* RNColorThief.swift */; };
+		AA7BD0FF233C713000111F1B /* MMCQ.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0B8B0422F0E09D001836FD /* MMCQ.swift */; };
+		AA7BD100233C713000111F1B /* RNColorThief.m in Sources */ = {isa = PBXBuildFile; fileRef = B3E7B5891CC2AC0600A0062D /* RNColorThief.m */; };
 		B3E7B58A1CC2AC0600A0062D /* RNColorThief.m in Sources */ = {isa = PBXBuildFile; fileRef = B3E7B5891CC2AC0600A0062D /* RNColorThief.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
 		58B511D91A9E6C8500147676 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "include/$(PRODUCT_NAME)";
+			dstSubfolderSpec = 16;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AA7BD0F2233C711300111F1B /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "include/$(PRODUCT_NAME)";
@@ -31,11 +44,19 @@
 		AA0B8B0422F0E09D001836FD /* MMCQ.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MMCQ.swift; sourceTree = "<group>"; };
 		AA0B8B0722F0E0D2001836FD /* RNColorThief.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RNColorThief.swift; sourceTree = "<group>"; };
 		AA2EE50A22F3528A00151EAF /* ColorThief.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorThief.swift; sourceTree = "<group>"; };
+		AA7BD0F4233C711300111F1B /* libRNColorThief-tvOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libRNColorThief-tvOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		B3E7B5891CC2AC0600A0062D /* RNColorThief.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNColorThief.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		58B511D81A9E6C8500147676 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AA7BD0F1233C711300111F1B /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -62,6 +83,7 @@
 				B3E7B5891CC2AC0600A0062D /* RNColorThief.m */,
 				134814211AA4EA7D00B7C361 /* Products */,
 				AA0B8B0222F0E09C001836FD /* RNColorThief-Bridging-Header.h */,
+				AA7BD0F4233C711300111F1B /* libRNColorThief-tvOS.a */,
 			);
 			sourceTree = "<group>";
 		};
@@ -85,6 +107,23 @@
 			productReference = 134814201AA4EA6300B7C361 /* libRNColorThief.a */;
 			productType = "com.apple.product-type.library.static";
 		};
+		AA7BD0F3233C711300111F1B /* RNColorThief-tvOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = AA7BD0FC233C711300111F1B /* Build configuration list for PBXNativeTarget "RNColorThief-tvOS" */;
+			buildPhases = (
+				AA7BD0F0233C711300111F1B /* Sources */,
+				AA7BD0F1233C711300111F1B /* Frameworks */,
+				AA7BD0F2233C711300111F1B /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "RNColorThief-tvOS";
+			productName = "RNColorThief-tvOS";
+			productReference = AA7BD0F4233C711300111F1B /* libRNColorThief-tvOS.a */;
+			productType = "com.apple.product-type.library.static";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -97,6 +136,11 @@
 					58B511DA1A9E6C8500147676 = {
 						CreatedOnToolsVersion = 6.1.1;
 						LastSwiftMigration = 1020;
+					};
+					AA7BD0F3233C711300111F1B = {
+						CreatedOnToolsVersion = 11.0;
+						DevelopmentTeam = D77AKBDCZS;
+						ProvisioningStyle = Automatic;
 					};
 				};
 			};
@@ -114,6 +158,7 @@
 			projectRoot = "";
 			targets = (
 				58B511DA1A9E6C8500147676 /* RNColorThief */,
+				AA7BD0F3233C711300111F1B /* RNColorThief-tvOS */,
 			);
 		};
 /* End PBXProject section */
@@ -127,6 +172,17 @@
 				B3E7B58A1CC2AC0600A0062D /* RNColorThief.m in Sources */,
 				AA2EE50B22F3528A00151EAF /* ColorThief.swift in Sources */,
 				AA0B8B0622F0E09D001836FD /* MMCQ.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AA7BD0F0233C711300111F1B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AA7BD0FD233C713000111F1B /* ColorThief.swift in Sources */,
+				AA7BD0FE233C713000111F1B /* RNColorThief.swift in Sources */,
+				AA7BD0FF233C713000111F1B /* MMCQ.swift in Sources */,
+				AA7BD100233C713000111F1B /* RNColorThief.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -255,6 +311,72 @@
 			};
 			name = Release;
 		};
+		AA7BD0FA233C711300111F1B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = D77AKBDCZS;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = appletvos;
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 3;
+				TVOS_DEPLOYMENT_TARGET = 13.0;
+			};
+			name = Debug;
+		};
+		AA7BD0FB233C711300111F1B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = D77AKBDCZS;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				MTL_FAST_MATH = YES;
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = appletvos;
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 3;
+				TVOS_DEPLOYMENT_TARGET = 13.0;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -272,6 +394,15 @@
 			buildConfigurations = (
 				58B511F01A9E6C8500147676 /* Debug */,
 				58B511F11A9E6C8500147676 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		AA7BD0FC233C711300111F1B /* Build configuration list for PBXNativeTarget "RNColorThief-tvOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AA7BD0FA233C711300111F1B /* Debug */,
+				AA7BD0FB233C711300111F1B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
