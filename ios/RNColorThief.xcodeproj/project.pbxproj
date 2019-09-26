@@ -230,6 +230,7 @@
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
+				SWIFT_OBJC_BRIDGING_HEADER = "RNColorThief-Bridging-Header.h";
 			};
 			name = Debug;
 		};
@@ -266,6 +267,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
+				SWIFT_OBJC_BRIDGING_HEADER = "RNColorThief-Bridging-Header.h";
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
