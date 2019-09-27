@@ -8,6 +8,8 @@ import com.facebook.react.bridge.Callback;
 import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.bridge.WritableNativeMap;
+import com.facebook.react.bridge.WritableArray;
+import com.facebook.react.bridge.WritableNativeArray;
 
 
 public class RNColorThiefModule extends ReactContextBaseJavaModule {
@@ -25,8 +27,8 @@ public class RNColorThiefModule extends ReactContextBaseJavaModule {
   }
 
   @ReactMethod
-  public void getPalette(String imageUrl, int quality, int count, boolean ignoreWhite, Promise promise) {
-    int[][] rgb = RNColorThief.getPalette(imageUrl, quality, count, ignoreWhite);
+  public void getPalette(String imageUrl, int quality, int count, boolean ignoreWhite, int width, int height, Promise promise) {
+    int[][] rgb = RNColorThief.getPalette(imageUrl, quality, count, ignoreWhite, width, height);
 
 
     WritableArray resultArray = new WritableNativeArray();
@@ -43,8 +45,8 @@ public class RNColorThiefModule extends ReactContextBaseJavaModule {
   }
 
   @ReactMethod
-  public void getColor(String imageUrl, int quality, boolean ignoreWhite, Promise promise) {
-    int[] rgb = RNColorThief.getColor(imageUrl, quality, ignoreWhite);
+  public void getColor(String imageUrl, int quality, boolean ignoreWhite, int width, int height, Promise promise) {
+    int[] rgb = RNColorThief.getColor(imageUrl, quality, ignoreWhite, width, height);
 
     WritableMap resultData = new WritableNativeMap();
     resultData.putInt("r", rgb[0]);
