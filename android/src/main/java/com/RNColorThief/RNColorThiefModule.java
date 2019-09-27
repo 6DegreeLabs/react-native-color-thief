@@ -25,6 +25,24 @@ public class RNColorThiefModule extends ReactContextBaseJavaModule {
   }
 
   @ReactMethod
+  public void getPalette(String imageUrl, int quality, int count, boolean ignoreWhite, Promise promise) {
+    int[][] rgb = RNColorThief.getPalette(imageUrl, quality, count, ignoreWhite);
+
+
+    WritableArray resultArray = new WritableNativeArray();
+
+    for (int i=0; i<rgb.length; i++) {
+      WritableMap resultData = new WritableNativeMap();
+      resultData.putInt("r", rgb[i][0]);
+      resultData.putInt("g", rgb[i][1]);
+      resultData.putInt("b", rgb[i][2]);
+      resultArray.pushMap(resultData);
+    }
+
+    promise.resolve(resultArray);
+  }
+
+  @ReactMethod
   public void getColor(String imageUrl, int quality, boolean ignoreWhite, Promise promise) {
     int[] rgb = RNColorThief.getColor(imageUrl, quality, ignoreWhite);
 

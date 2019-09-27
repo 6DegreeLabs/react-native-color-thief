@@ -24,6 +24,7 @@ import java.io.IOException;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.util.Base64;
 
 public class RNColorThief {
 
@@ -77,14 +78,22 @@ public class RNColorThief {
      * @return the image as a Bitmap
      */
     private static Bitmap retrieveImageFromUrl(String imageUrl) {
-        try {
-            URL url = new URL(imageUrl);
-            Bitmap image = BitmapFactory.decodeStream(url.openConnection().getInputStream());
-            return image;
-        } catch (IOException e) {
-            System.out.println(e);
-            return null;
-        }
-	}
+        if (imageUrl.startsWith("data:image")) {
+            String base64Image = imageUrl.split(",")[1];
 
+            byte[] decodedString = Base64.decode(base64Image, Base64.DEFAULT);
+            Bitmap image = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+            return image;
+        }
+        else {
+            try {
+                URL url = new URL(imageUrl);
+                Bitmap image = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                return image;
+            } catch (IOException e) {
+                System.out.println(e);
+                return null;
+            }
+        }
+    }
 }
