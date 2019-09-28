@@ -1,6 +1,6 @@
 {
   "name": "react-native-color-thief",
-  "version": "0.3.1",
+  "version": "0.4.1",
   "description": "color thief for react-native (ios & android)",
   "main": "index.js",
   "scripts": {
@@ -30,6 +30,9 @@
     },
     {
       "name": "Jimin Cutrell"
+    },
+    {
+      "name": "Clinton Robinson"
     }
   ],
   "license": "MIT",
