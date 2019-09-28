@@ -48,7 +48,7 @@ public class RNColorThief : NSObject {
      */
     
     @objc
-    public func getColor(_ source: String, quality: Int = ColorThief.defaultQuality, ignoreWhite: Bool = ColorThief.defaultIgnoreWhite, resolve: RCTPromiseResolveBlock, reject: RCTPromiseRejectBlock) -> Void {
+    public func getColor(_ source: String, quality: Int = ColorThief.defaultQuality, ignoreWhite: Bool = ColorThief.defaultIgnoreWhite, width: Int = 0, height: Int = 0, resolve: RCTPromiseResolveBlock, reject: RCTPromiseRejectBlock) -> Void {
         guard let image = RNColorThief.getUIImage(from: source) else {
             return reject("Error getting image", nil, nil);
         }
@@ -79,7 +79,7 @@ public class RNColorThief : NSObject {
      - Returns: Promise: resolves array rgba color strings
     */
     @objc
-    func getPalette(_ source:String, colorCount: Int = defaultColorCount, quality: Int = ColorThief.defaultQuality, ignoreWhite: Bool = ColorThief.defaultIgnoreWhite, resolve: RCTPromiseResolveBlock, reject: RCTPromiseRejectBlock) -> Void {
+    func getPalette(_ source:String, colorCount: Int = defaultColorCount, quality: Int = ColorThief.defaultQuality, ignoreWhite: Bool = ColorThief.defaultIgnoreWhite, width: Int = 0, height: Int = 0, resolve: RCTPromiseResolveBlock, reject: RCTPromiseRejectBlock) -> Void {
         
         guard let image = RNColorThief.getUIImage(from: source) else {
             return reject("Error getting image", nil, nil);
@@ -97,21 +97,50 @@ public class RNColorThief : NSObject {
      Private Methods
      ========================
      */
-    static private func getUIImage(from path:String) -> UIImage? {
-        
-        guard let imageURL = NSURL.init(string:path) else {
-            return nil;
+    static private func getUIImage(from path:String, width:Int, height: Int) -> UIImage? {
+        let image:UIImage = nil;
+        let _width: Int;
+        let _height: Int;
+
+        if (path.starts(with: "data:image")) {
+            let temp = path?.components(separatedBy: ",");
+            let dataDecoded : Data = Data(base64Encoded: temp![1], options: .ignoreUnknownCharacters)!;
+            image = UIImage(data: dataDecoded);
+        } else {
+            guard let imageURL = NSURL.init(string:path) else {
+                return nil;
+            }
+            
+            guard let imageData = NSData.init(contentsOf: imageURL as URL) else {
+                return nil;
+            }
+            
+            guard image = UIImage.init(data: imageData as Data) else {
+                return nil;
+            }
         }
         
-        guard let imageData = NSData.init(contentsOf: imageURL as URL) else {
-            return nil;
+        if (width == 0 && height == 0) {
+            return image;
         }
         
-        guard let image = UIImage.init(data: imageData as Data) else {
-            return nil;
+        let cgImage = image.cgImage!;
+        
+        if (width == 0) {
+            width = cgImage.width;
         }
         
-        return image;
+        if (height == 0) {
+            height = cgImage.height;
+        }
+        
+        let croppedCGImage = cgImage.cropping(to:
+            CGRect(origin: <#T##CGPoint#>(x: 0, y: 0),
+                   size: <#T##CGSize#>(height: height, width: width )
+            )
+        );
+        
+        return UIImage(cgImage: croppedCGImage!)
     }
     
     static private func getRGBA(from color: MMCQ.Color) -> String {
