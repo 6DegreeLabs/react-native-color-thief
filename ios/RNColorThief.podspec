@@ -16,7 +16,7 @@ Pod::Spec.new do |s|
   s.platform     = :ios, "10.0"
   s.source       = { :git => "https://github.com/joinlane/react-native-color-thief.git", :tag => "#{s.version}" }
 
-  s.source_files = "ios/*.swift", "ios/*.h", , "ios/*.m"
+  s.source_files = "ios/*.swift", "ios/*.h", "ios/*.m"
   s.requires_arc = true
 
   s.dependency 'React'
