@@ -26,33 +26,51 @@ public class RNColorThiefModule extends ReactContextBaseJavaModule {
     return "RNColorThief";
   }
 
+  private WriteableMap getDefaultColor() {
+    WritableMap resultData = new WritableNativeMap();
+    resultData.putInt("r", 0);
+    resultData.putInt("g", 0);
+    resultData.putInt("b", 0);
+    return resultData;
+  }
+
   @ReactMethod
   public void getPalette(String imageUrl, int quality, int count, boolean ignoreWhite, int width, int height, Promise promise) {
-    int[][] rgb = RNColorThief.getPalette(imageUrl, quality, count, ignoreWhite, width, height);
+    try {
+      int[][] rgb = RNColorThief.getPalette(imageUrl, quality, count, ignoreWhite, width, height);
 
 
-    WritableArray resultArray = new WritableNativeArray();
+      WritableArray resultArray = new WritableNativeArray();
 
-    for (int i=0; i<rgb.length; i++) {
-      WritableMap resultData = new WritableNativeMap();
-      resultData.putInt("r", rgb[i][0]);
-      resultData.putInt("g", rgb[i][1]);
-      resultData.putInt("b", rgb[i][2]);
-      resultArray.pushMap(resultData);
+      for (int i = 0; i < rgb.length; i++) {
+        WritableMap resultData = new WritableNativeMap();
+        resultData.putInt("r", rgb[i][0]);
+        resultData.putInt("g", rgb[i][1]);
+        resultData.putInt("b", rgb[i][2]);
+        resultArray.pushMap(resultData);
+      }
+
+      promise.resolve(resultArray);
+    } catch (Exception ex) {
+      WritableArray resultArray = new WritableNativeArray();
+      resultArray.pushMap(getDefaultColor());
+      promise.resolve(resultArray);
     }
-
-    promise.resolve(resultArray);
   }
 
   @ReactMethod
   public void getColor(String imageUrl, int quality, boolean ignoreWhite, int width, int height, Promise promise) {
-    int[] rgb = RNColorThief.getColor(imageUrl, quality, ignoreWhite, width, height);
+    try {
+      int[] rgb = RNColorThief.getColor(imageUrl, quality, ignoreWhite, width, height);
 
-    WritableMap resultData = new WritableNativeMap();
-    resultData.putInt("r", rgb[0]);
-    resultData.putInt("g", rgb[1]);
-    resultData.putInt("b", rgb[2]);
+      WritableMap resultData = new WritableNativeMap();
+      resultData.putInt("r", rgb[0]);
+      resultData.putInt("g", rgb[1]);
+      resultData.putInt("b", rgb[2]);
 
-    promise.resolve(resultData);
+      promise.resolve(resultData);
+    } catch (Exception e) {
+      promise.resolve(getDefaultColor());
+    }
   }
 }
