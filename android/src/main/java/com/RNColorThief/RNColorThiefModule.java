@@ -26,7 +26,7 @@ public class RNColorThiefModule extends ReactContextBaseJavaModule {
     return "RNColorThief";
   }
 
-  private WriteableMap getDefaultColor() {
+  private WritableMap getDefaultColor() {
     WritableMap resultData = new WritableNativeMap();
     resultData.putInt("r", 0);
     resultData.putInt("g", 0);
