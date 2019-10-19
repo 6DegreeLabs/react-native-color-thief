@@ -1,6 +1,6 @@
 {
   "name": "react-native-color-thief",
-  "version": "0.4.3",
+  "version": "0.4.4",
   "description": "color thief for react-native (ios & android)",
   "main": "index.js",
   "scripts": {
