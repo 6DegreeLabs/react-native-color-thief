@@ -15,8 +15,8 @@ Pod::Spec.new do |s|
   s.tvos.deployment_target = '10.0'
 
   s.source       = { :git => "https://github.com/6DegreeLabs/react-native-color-thief", :tag => "v#{s.version}" }
-  s.source_files  = "ios/**/*.{h,m}"
-  s.source_files  = "ios/**/*.swift"
+  s.source_files  = "ios/*.{h,m}"
+  s.source_files  = "ios/*.swift"
 
   s.dependency 'React'
 end
