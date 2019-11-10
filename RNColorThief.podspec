@@ -9,12 +9,12 @@ Pod::Spec.new do |s|
   s.description  = <<-DESC
                   RNColorThief
                    DESC
-  s.homepage     = "https://github.com/joinlane/react-native-color-thief"
+  s.homepage     = package["repository"]["baseUrl"]
   s.license      = "MIT"
   # s.license    = { :type => "MIT", :file => "FILE_LICENSE" }
-  s.author       = { "author" => "author@domain.cn" }
+  s.author       = { "author" => package["author"]["name"] }
   s.platform     = :ios, "10.0"
-  s.source       = { :git => "https://github.com/joinlane/react-native-color-thief.git", :tag => "#{s.version}" }
+  s.source       = { :git => package["repository"]["url"], :tag => "#{s.version}" }
 
   s.source_files = "ios/*.swift", "ios/*.h", "ios/*.m"
   s.requires_arc = true
