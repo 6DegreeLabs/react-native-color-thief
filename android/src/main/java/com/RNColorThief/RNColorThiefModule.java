@@ -33,15 +33,24 @@ public class RNColorThiefModule extends ReactContextBaseJavaModule {
 
     WritableArray resultArray = new WritableNativeArray();
 
-    for (int i=0; i<rgb.length; i++) {
-      WritableMap resultData = new WritableNativeMap();
-      resultData.putInt("r", rgb[i][0]);
-      resultData.putInt("g", rgb[i][1]);
-      resultData.putInt("b", rgb[i][2]);
-      resultArray.pushMap(resultData);
-    }
+     if (rgb == null) {
+            WritableMap resultData = new WritableNativeMap();
 
-    promise.resolve(resultArray);
+            resultData.putInt("r", 0);
+            resultData.putInt("g", 0);
+            resultData.putInt("b", 0);
+            promise.resolve(resultData);
+        } else {
+            for (int i = 0; i < rgb.length; i++) {
+                WritableMap resultData = new WritableNativeMap();
+                resultData.putInt("r", rgb[i][0]);
+                resultData.putInt("g", rgb[i][1]);
+                resultData.putInt("b", rgb[i][2]);
+                resultArray.pushMap(resultData);
+            }
+
+            promise.resolve(resultArray);
+        }
   }
 
   @ReactMethod
