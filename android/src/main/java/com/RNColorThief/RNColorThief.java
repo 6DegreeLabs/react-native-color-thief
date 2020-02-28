@@ -78,6 +78,11 @@ public class RNColorThief {
      * @return the image as a Bitmap
      */
     private static Bitmap retrieveImageFromUrl(String imageUrl) {
+        if ((imageUrl instanceof String) == false) {
+            System.out.println("Must pass a String for the imageUrl.");
+            return null;
+        }
+
         if (imageUrl.startsWith("data:image")) {
             String base64Image = imageUrl.split(",")[1];
 
