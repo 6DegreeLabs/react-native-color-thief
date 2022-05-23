@@ -4,5 +4,5 @@ export interface ColorObject {
     b: number;
 }
 
-export function getColor(source: string, quality: number, ignoreWhite: boolean): ColorObject;
-export function getPalette(source: string, colorCount: number, quality: number, ignoreWhite: boolean): ColorObject[];
+export function getColor(source: string, quality: number, ignoreWhite: boolean): Promise<ColorObject>;
+export function getPalette(source: string, colorCount: number, quality: number, ignoreWhite: boolean): Promise<ColorObject[]>;
