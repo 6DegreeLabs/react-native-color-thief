@@ -3,6 +3,7 @@
   "version": "0.3.3",
   "description": "color thief for react-native (ios & android)",
   "main": "index.js",
+  "types": "index.d.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
