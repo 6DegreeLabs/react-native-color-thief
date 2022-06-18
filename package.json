@@ -1,6 +1,6 @@
 {
   "name": "react-native-color-thief",
-  "version": "0.3.3",
+  "version": "0.3.4",
   "description": "color thief for react-native (ios & android)",
   "main": "index.js",
   "types": "index.d.ts",
@@ -16,8 +16,8 @@
   "title": "React Native Color Thief",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/6DegreeLabs/react-native-color-thief.git",
-    "baseUrl": "https://github.com/6DegreeLabs/react-native-color-thief"
+    "url": "git+https://github.com/korifey91/react-native-color-thief.git",
+    "baseUrl": "https://github.com/korifey91/react-native-color-thief"
   },
   "author": {
     "name": "Likewise, Inc."
