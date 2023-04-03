@@ -1,6 +1,6 @@
 {
   "name": "react-native-color-thief",
-  "version": "0.3.4",
+  "version": "0.3.5",
   "description": "color thief for react-native (ios & android)",
   "main": "index.js",
   "types": "index.d.ts",
@@ -37,7 +37,7 @@
   "licenseFilename": "LICENSE",
   "readmeFilename": "README.md",
   "peerDependencies": {
-    "react": "^17.0.1",
+    "react": "^18.2.0",
     "react-native": ">=0.59.0 <1.0.x"
   }
 }
