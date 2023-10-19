@@ -65,6 +65,12 @@ RNColorThief.getColor(imageUri, quality, includeWhite).then((color) => {
 	console.log('error', error);
 });
 ```
+## Showcase
+This library is used by following apps. Please send a pull request if you are also using the library.
+### Croma - Palette Manager
+* [Playstore](https://play.google.com/store/apps/details?id=app.croma)
+* [App store](https://apps.apple.com/app/croma-palette-manager/id1596763657)
+* [Github(Open source)](https://github.com/croma-app/croma-react)
 
 ## Troubleshooting
 
