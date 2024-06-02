@@ -12,12 +12,12 @@
  * ------
  * Lokesh Dhakar - for the original Color Thief JavaScript version
  * available at http://lokeshdhakar.com/projects/color-thief/
- * 
+ *
  * Sven Woltmann - for the fast Java Implementation of Color Thief
- * available at https://github.com/SvenWoltmann/color-thief-java 
+ * available at https://github.com/SvenWoltmann/color-thief-java
  */
 
-package com.RNColorThief;
+package com.applicaster.RNColorThief;
 
 import java.net.URL;
 import java.io.IOException;

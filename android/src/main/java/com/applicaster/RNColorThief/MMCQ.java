@@ -1,7 +1,7 @@
 /*
  * Java Color Thief
  * by Sven Woltmann, Fonpit AG
- * 
+ *
  * https://www.androidpit.com
  * https://www.androidpit.de
  *
@@ -16,7 +16,8 @@
  * available at http://lokeshdhakar.com/projects/color-thief/
  */
 
-package com.RNColorThief;
+package com.applicaster.RNColorThief;
+
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -36,14 +37,14 @@ public class MMCQ {
 
     /**
      * Get reduced-space color index for a pixel.
-     * 
+     *
      * @param r
      *            the red value
      * @param g
      *            the green value
      * @param b
      *            the blue value
-     * 
+     *
      * @return the color index
      */
     static int getColorIndex(int r, int g, int b) {

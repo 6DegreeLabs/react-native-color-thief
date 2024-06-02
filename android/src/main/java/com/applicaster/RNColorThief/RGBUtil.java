@@ -16,7 +16,8 @@
  * available at http://lokeshdhakar.com/projects/color-thief/
  */
 
-package com.RNColorThief;
+package com.applicaster.RNColorThief;
+
 
 public class RGBUtil {
 

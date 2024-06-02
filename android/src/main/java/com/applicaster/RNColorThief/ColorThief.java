@@ -12,17 +12,17 @@
  * ------
  * Lokesh Dhakar - for the original Color Thief JavaScript version
  * available at http://lokeshdhakar.com/projects/color-thief/
- * 
+ *
  * Sven Woltmann - for the fast Java Implementation of Color Thief
- * available at https://github.com/SvenWoltmann/color-thief-java 
+ * available at https://github.com/SvenWoltmann/color-thief-java
  */
 
-package com.RNColorThief;
+package com.applicaster.RNColorThief;
 
 import android.graphics.Bitmap;
 import java.util.Arrays;
 
-import com.RNColorThief.MMCQ.CMap;
+import com.applicaster.RNColorThief.MMCQ.CMap;
 
 public class ColorThief {
 
@@ -75,12 +75,12 @@ public class ColorThief {
 
     /**
      * Use the median cut algorithm to cluster similar colors.
-     * 
+     *
      * @param sourceImage
      *            the source image
      * @param colorCount
      *            the size of the palette; the number of colors returned
-     * 
+     *
      * @return the palette as array of RGB arrays
      */
     public static int[][] getPalette(Bitmap sourceImage, int colorCount) {
@@ -93,7 +93,7 @@ public class ColorThief {
 
     /**
      * Use the median cut algorithm to cluster similar colors.
-     * 
+     *
      * @param sourceImage
      *            the source image
      * @param colorCount
@@ -104,7 +104,7 @@ public class ColorThief {
      *            the greater the likelihood that colors will be missed.
      * @param ignoreWhite
      *            if <code>true</code>, white pixels are ignored
-     * 
+     *
      * @return the palette as array of RGB arrays
      * @throws IllegalArgumentException
      *             if quality is &lt; 1
@@ -123,12 +123,12 @@ public class ColorThief {
 
     /**
      * Use the median cut algorithm to cluster similar colors.
-     * 
+     *
      * @param sourceImage
      *            the source image
      * @param colorCount
      *            the size of the palette; the number of colors returned (minimum 2, maximum 256)
-     * 
+     *
      * @return the color map
      */
     public static CMap getColorMap(Bitmap sourceImage, int colorCount) {
@@ -137,7 +137,7 @@ public class ColorThief {
 
     /**
      * Use the median cut algorithm to cluster similar colors.
-     * 
+     *
      * @param sourceImage
      *            the source image
      * @param colorCount
@@ -148,7 +148,7 @@ public class ColorThief {
      *            the greater the likelihood that colors will be missed.
      * @param ignoreWhite
      *            if <code>true</code>, white pixels are ignored
-     * 
+     *
      * @return the color map
      * @throws IllegalArgumentException
      *             if quality is &lt; 1
@@ -174,7 +174,7 @@ public class ColorThief {
 
     /**
      * Gets the image's pixels via Bitmap.getPixels(..).
-     * 
+     *
      * @param sourceImage
      *            the source image
      * @param quality
@@ -183,7 +183,7 @@ public class ColorThief {
      *            the greater the likelihood that colors will be missed.
      * @param ignoreWhite
      *            if <code>true</code>, white pixels are ignored
-     * 
+     *
      * @return an array of pixels (each an RGB int array)
      */
     private static int[][] getPixels(

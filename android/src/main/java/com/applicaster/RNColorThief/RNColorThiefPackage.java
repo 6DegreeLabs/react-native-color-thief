@@ -1,5 +1,7 @@
 
-package com.RNColorThief;
+package com.applicaster.RNColorThief;
+
+
 
 import java.util.Arrays;
 import java.util.Collections;

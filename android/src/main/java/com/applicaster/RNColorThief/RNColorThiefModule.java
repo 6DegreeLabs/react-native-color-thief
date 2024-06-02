@@ -1,5 +1,6 @@
 
-package com.RNColorThief;
+package com.applicaster.RNColorThief;
+
 
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
