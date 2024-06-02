@@ -1,11 +1,12 @@
 {
   "name": "@applicaster/react-native-color-thief",
-  "version": "0.3.6",
+  "version": "0.3.7",
   "description": "color thief for react-native",
   "main": "index.js",
   "types": "index.d.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "install": "npm install canvas-prebuilt"
   },
   "keywords": [
     "react-native",
@@ -39,5 +40,9 @@
   "peerDependencies": {
     "react": "^18.2.0",
     "react-native": ">=0.59.0 <1.0.x"
+  },
+  "dependencies": {
+    "canvas": "^2.11.2",
+    "colorthief": "npm:@pioug/colorthief@^3.0.1"
   }
 }
