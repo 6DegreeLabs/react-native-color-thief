@@ -1,9 +1,9 @@
-import { NativeModules, Platform } from 'react-native';
+import {NativeModules, Platform} from 'react-native';
 
 let RNColorThief;
 
 if (Platform.OS === 'web') {
-    const ColorThief = require('@pioug/colorthief');
+    const ColorThief = require('colorthief');
 
     RNColorThief = {
         getColor: async (imgElement, quality = 10, ignoreWhite = false) => {
@@ -22,12 +22,10 @@ if (Platform.OS === 'web') {
 
     RNColorThief = {
         getColor: async (source, quality = 10, ignoreWhite = false) => {
-            const color = await NativeColorThief.getColor(source, quality, ignoreWhite);
-            return color;
+            return await NativeColorThief.getColor(source, quality, ignoreWhite);
         },
         getPalette: async (source, colorCount = 10, quality = 10, ignoreWhite = false) => {
-            const palette = await NativeColorThief.getPalette(source, colorCount, quality, ignoreWhite);
-            return palette;
+            return await NativeColorThief.getPalette(source, colorCount, quality, ignoreWhite);
         },
     };
 }
