@@ -1,6 +1,6 @@
 {
   "name": "@applicaster/react-native-color-thief",
-  "version": "0.3.10",
+  "version": "0.3.11",
   "description": "color thief for react-native",
   "main": "index.js",
   "types": "index.d.ts",
@@ -19,6 +19,8 @@
     "url": "git+https://github.com/korifey91/react-native-color-thief.git",
     "baseUrl": "https://github.com/korifey91/react-native-color-thief"
   },
+  "author": "Levon Avetisyan",
+
   "license": "MIT",
   "licenseFilename": "LICENSE",
   "readmeFilename": "README.md",
