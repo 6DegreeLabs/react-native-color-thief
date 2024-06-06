@@ -1,9 +1,8 @@
 {
   "name": "@applicaster/react-native-color-thief",
-  "version": "0.3.11",
+  "version": "0.3.12",
   "description": "color thief for react-native",
   "main": "index.js",
-  "types": "index.d.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -20,7 +19,6 @@
     "baseUrl": "https://github.com/korifey91/react-native-color-thief"
   },
   "author": "Levon Avetisyan",
-
   "license": "MIT",
   "licenseFilename": "LICENSE",
   "readmeFilename": "README.md",
@@ -29,6 +27,7 @@
     "react-native": ">=0.59.0 <1.0.x"
   },
   "dependencies": {
+    "@types/color-thief-node": "^1.0.4",
     "canvas": "^2.11.2",
     "colorthief": "npm:@pioug/colorthief@^3.0.1"
   }
