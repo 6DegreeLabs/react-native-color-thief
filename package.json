@@ -1,6 +1,6 @@
 {
   "name": "@applicaster/react-native-color-thief",
-  "version": "0.3.12",
+  "version": "0.3.13",
   "description": "color thief for react-native",
   "main": "index.js",
   "scripts": {
@@ -28,7 +28,6 @@
   },
   "dependencies": {
     "@types/color-thief-node": "^1.0.4",
-    "canvas": "^2.11.2",
     "colorthief": "npm:@pioug/colorthief@^3.0.1"
   }
 }
