@@ -19,8 +19,7 @@
 
 import UIKit
 
-public class ColorThief {
-
+public enum ColorThief {
     public static let defaultQuality = 10
     public static let defaultIgnoreWhite = true
 
@@ -81,7 +80,10 @@ public class ColorThief {
         guard let pixels = makeBytes(from: image) else {
             return nil
         }
-        let colorMap = MMCQ.quantize(pixels, quality: quality, ignoreWhite: ignoreWhite, maxColors: colorCount)
+        let colorMap = MMCQ.quantize(pixels: pixels,
+                                     colorCount: colorCount,
+                                     quality: quality,
+                                     ignoreWhite: ignoreWhite)
         return colorMap
     }
 
@@ -147,11 +149,11 @@ public class ColorThief {
             bitsPerComponent: 8,
             bytesPerRow: 4 * width,
             space: CGColorSpaceCreateDeviceRGB(),
-            bitmapInfo: CGImageAlphaInfo.noneSkipLast.rawValue | CGBitmapInfo.byteOrder32Little.rawValue) else {
-                return nil
+            bitmapInfo: CGImageAlphaInfo.noneSkipLast.rawValue | CGBitmapInfo.byteOrder32Little.rawValue
+        ) else {
+            return nil
         }
         context.draw(image, in: CGRect(x: 0, y: 0, width: width, height: height))
         return rawData
     }
-
 }
