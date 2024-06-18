@@ -1,7 +1,29 @@
+//
+//  MMCQ.swift
+//  ColorThiefSwift
+//
+//  Created by Kazuki Ohara on 2017/02/11.
+//  Copyright © 2019 Kazuki Ohara. All rights reserved.
+//
+//  License
+//  -------
+//  MIT License
+//  https://github.com/yamoridon/ColorThiefSwift/blob/master/LICENSE
+//
+//  Thanks
+//  ------
+//  Lokesh Dhakar - for the original Color Thief JavaScript version
+//  http://lokeshdhakar.com/projects/color-thief/
+//  Sven Woltmann - for the fast Java Implementation
+//  https://github.com/SvenWoltmann/color-thief-java
+
 import Foundation
 import UIKit
 
+/// MMCQ (modified median cut quantization) algorithm from
+/// the Leptonica library (http://www.leptonica.com/).
 open class MMCQ {
+    // Use only upper 5 bits of 8 bits
     private static let signalBits = 5
     private static let rightShift = 8 - signalBits
     private static let multiplier = 1 << rightShift
@@ -10,6 +32,13 @@ open class MMCQ {
     private static let fractionByPopulation = 0.75
     private static let maxIterations = 1000
 
+    /// Get reduced-space color index for a pixel.
+    ///
+    /// - Parameters:
+    ///   - red: the red value
+    ///   - green: the green value
+    ///   - blue: the blue value
+    /// - Returns: the color index
     static func makeColorIndexOf(red: Int, green: Int, blue: Int) -> Int {
         (red << (2 * signalBits)) + (green << signalBits) + blue
     }
@@ -26,14 +55,17 @@ open class MMCQ {
         }
 
         public func makeUIColor() -> UIColor {
-            UIColor(red: CGFloat(r) / 255, green: CGFloat(g) / 255, blue: CGFloat(b) / 255, alpha: 1)
+            UIColor(red: CGFloat(r) / CGFloat(255), green: CGFloat(g) / CGFloat(255), blue: CGFloat(b) / CGFloat(255), alpha: CGFloat(1))
         }
     }
 
     enum ColorChannel {
-        case r, g, b
+        case r
+        case g
+        case b
     }
 
+    /// 3D color space box.
     class VBox {
         var rMin: UInt8
         var rMax: UInt8
@@ -42,7 +74,8 @@ open class MMCQ {
         var bMin: UInt8
         var bMax: UInt8
 
-        let histogram: [Int]
+        private let histogram: [Int]
+
         private var average: Color?
         private var volume: Int?
         private var count: Int?
@@ -57,74 +90,121 @@ open class MMCQ {
             self.histogram = histogram
         }
 
-        func rRange() -> CountableRange<Int> { Int(rMin) ..< Int(rMax + 1) }
-        func gRange() -> CountableRange<Int> { Int(gMin) ..< Int(gMax + 1) }
-        func bRange() -> CountableRange<Int> { Int(bMin) ..< Int(bMax + 1) }
+        init(vbox: VBox) {
+            rMin = vbox.rMin
+            rMax = vbox.rMax
+            gMin = vbox.gMin
+            gMax = vbox.gMax
+            bMin = vbox.bMin
+            bMax = vbox.bMax
+            histogram = vbox.histogram
+        }
 
-        func getVolume(forceRecalculate: Bool = false) -> Int {
-            if let volume, !forceRecalculate {
+        func makeRange(min: UInt8, max: UInt8) -> CountableRange<Int> {
+            if min <= max {
+                Int(min) ..< Int(max + 1)
+            } else {
+                Int(max) ..< Int(max)
+            }
+        }
+
+        var rRange: CountableRange<Int> { makeRange(min: rMin, max: rMax) }
+        var gRange: CountableRange<Int> { makeRange(min: gMin, max: gMax) }
+        var bRange: CountableRange<Int> { makeRange(min: bMin, max: bMax) }
+
+        /// Get 3 dimensional volume of the color space
+        ///
+        /// - Parameter force: force recalculate
+        /// - Returns: the volume
+        func getVolume(forceRecalculate force: Bool = false) -> Int {
+            if let volume, !force {
+                return volume
+            } else {
+                let volume = (Int(rMax) - Int(rMin) + 1) * (Int(gMax) - Int(gMin) + 1) * (Int(bMax) - Int(bMin) + 1)
+                self.volume = volume
                 return volume
             }
-            let volume = (Int(rMax) - Int(rMin) + 1) * (Int(gMax) - Int(gMin) + 1) * (Int(bMax) - Int(bMin) + 1)
-            self.volume = volume
-            return volume
         }
 
-        func getCount(forceRecalculate: Bool = false) -> Int {
-            if let count, !forceRecalculate {
+        /// Get total count of histogram samples
+        ///
+        /// - Parameter force: force recalculate
+        /// - Returns: the volume
+        func getCount(forceRecalculate force: Bool = false) -> Int {
+            if let count, !force {
+                return count
+            } else {
+                var count = 0
+                for i in rRange {
+                    for j in gRange {
+                        for k in bRange {
+                            let index = MMCQ.makeColorIndexOf(red: i, green: j, blue: k)
+                            count += histogram[index]
+                        }
+                    }
+                }
+                self.count = count
                 return count
             }
-            let count = rRange().reduce(0) { acc, r in
-                acc + gRange().reduce(0) { acc, g in
-                    acc + bRange().reduce(0) { acc, b in
-                        acc + histogram[MMCQ.makeColorIndexOf(red: r, green: g, blue: b)]
-                    }
-                }
-            }
-            self.count = count
-            return count
         }
 
-        func getAverage(forceRecalculate: Bool = false) -> Color {
-            if let average, !forceRecalculate {
+        func getAverage(forceRecalculate force: Bool = false) -> Color {
+            if let average, !force {
                 return average
-            }
-            var ntot = 0
-            var rSum = 0, gSum = 0, bSum = 0
+            } else {
+                var ntot = 0
 
-            for r in rRange() {
-                for g in gRange() {
-                    for b in bRange() {
-                        let index = MMCQ.makeColorIndexOf(red: r, green: g, blue: b)
-                        let hval = histogram[index]
-                        ntot += hval
-                        rSum += Int(Double(hval) * (Double(r) + 0.5) * Double(MMCQ.multiplier))
-                        gSum += Int(Double(hval) * (Double(g) + 0.5) * Double(MMCQ.multiplier))
-                        bSum += Int(Double(hval) * (Double(b) + 0.5) * Double(MMCQ.multiplier))
+                var rSum = 0
+                var gSum = 0
+                var bSum = 0
+
+                for i in rRange {
+                    for j in gRange {
+                        for k in bRange {
+                            let index = MMCQ.makeColorIndexOf(red: i, green: j, blue: k)
+                            let hval = histogram[index]
+                            ntot += hval
+                            rSum += Int(Double(hval) * (Double(i) + 0.5) * Double(MMCQ.multiplier))
+                            gSum += Int(Double(hval) * (Double(j) + 0.5) * Double(MMCQ.multiplier))
+                            bSum += Int(Double(hval) * (Double(k) + 0.5) * Double(MMCQ.multiplier))
+                        }
                     }
                 }
-            }
 
-            let average = if ntot > 0 {
-                Color(r: UInt8(rSum / ntot), g: UInt8(gSum / ntot), b: UInt8(bSum / ntot))
-            } else {
-                Color(r: UInt8(min(MMCQ.multiplier * (Int(rMin) + Int(rMax) + 1) / 2, 255)),
-                      g: UInt8(min(MMCQ.multiplier * (Int(gMin) + Int(gMax) + 1) / 2, 255)),
-                      b: UInt8(min(MMCQ.multiplier * (Int(bMin) + Int(bMax) + 1) / 2, 255)))
-            }
+                let average: Color
+                if ntot > 0 {
+                    let r = UInt8(rSum / ntot)
+                    let g = UInt8(gSum / ntot)
+                    let b = UInt8(bSum / ntot)
+                    average = Color(r: r, g: g, b: b)
+                } else {
+                    let r = UInt8(min(MMCQ.multiplier * (Int(rMin) + Int(rMax) + 1) / 2, 255))
+                    let g = UInt8(min(MMCQ.multiplier * (Int(gMin) + Int(gMax) + 1) / 2, 255))
+                    let b = UInt8(min(MMCQ.multiplier * (Int(bMin) + Int(bMax) + 1) / 2, 255))
+                    average = Color(r: r, g: g, b: b)
+                }
 
-            self.average = average
-            return average
+                self.average = average
+                return average
+            }
         }
 
         func widestColorChannel() -> ColorChannel {
             let rWidth = rMax - rMin
             let gWidth = gMax - gMin
             let bWidth = bMax - bMin
-            return [rWidth, gWidth, bWidth].max() == rWidth ? .r : gWidth == bWidth ? .g : .b
+            switch max(rWidth, gWidth, bWidth) {
+            case rWidth:
+                return .r
+            case gWidth:
+                return .g
+            default:
+                return .b
+            }
         }
     }
 
+    /// Color map.
     open class ColorMap {
         var vboxes = [VBox]()
 
@@ -137,15 +217,15 @@ open class MMCQ {
         }
 
         open func makeNearestColor(to color: Color) -> Color {
-            var nearestColor = Color(r: 0, g: 0, b: 0)
             var nearestDistance = Int.max
+            var nearestColor = Color(r: 0, g: 0, b: 0)
 
             for vbox in vboxes {
                 let vbColor = vbox.getAverage()
-                let distance = abs(Int(color.r) - Int(vbColor.r)) +
-                    abs(Int(color.g) - Int(vbColor.g)) +
-                    abs(Int(color.b) - Int(vbColor.b))
-
+                let dr = abs(Int(color.r) - Int(vbColor.r))
+                let dg = abs(Int(color.g) - Int(vbColor.g))
+                let db = abs(Int(color.b) - Int(vbColor.b))
+                let distance = dr + dg + db
                 if distance < nearestDistance {
                     nearestDistance = distance
                     nearestColor = vbColor
@@ -156,19 +236,24 @@ open class MMCQ {
         }
     }
 
+    /// Histo (1-d array, giving the number of pixels in each quantized region of color space), or null on error.
     private static func makeHistogramAndVBox(from pixels: [UInt8], quality: Int, ignoreWhite: Bool) -> ([Int], VBox) {
         var histogram = [Int](repeating: 0, count: histogramSize)
-        var rMin = UInt8.max, rMax = UInt8.min
-        var gMin = UInt8.max, gMax = UInt8.min
-        var bMin = UInt8.max, bMax = UInt8.min
+        var rMin = UInt8.max
+        var rMax = UInt8.min
+        var gMin = UInt8.max
+        var gMax = UInt8.min
+        var bMin = UInt8.max
+        var bMax = UInt8.min
 
         let pixelCount = pixels.count / 4
         for i in stride(from: 0, to: pixelCount, by: quality) {
-            let a = pixels[i * 4]
-            let r = pixels[i * 4 + 1]
+            let a = pixels[i * 4 + 0]
+            let b = pixels[i * 4 + 1]
             let g = pixels[i * 4 + 2]
-            let b = pixels[i * 4 + 3]
+            let r = pixels[i * 4 + 3]
 
+            // If pixel is not mostly opaque or white
             guard a >= 125, !(ignoreWhite && r > 250 && g > 250 && b > 250) else {
                 continue
             }
@@ -177,6 +262,7 @@ open class MMCQ {
             let shiftedG = g >> UInt8(rightShift)
             let shiftedB = b >> UInt8(rightShift)
 
+            // find min/max
             rMin = min(rMin, shiftedR)
             rMax = max(rMax, shiftedR)
             gMin = min(gMin, shiftedG)
@@ -184,95 +270,218 @@ open class MMCQ {
             bMin = min(bMin, shiftedB)
             bMax = max(bMax, shiftedB)
 
-            histogram[MMCQ.makeColorIndexOf(red: Int(shiftedR), green: Int(shiftedG), blue: Int(shiftedB))] += 1
+            // increment histgram
+            let index = MMCQ.makeColorIndexOf(red: Int(shiftedR), green: Int(shiftedG), blue: Int(shiftedB))
+            histogram[index] += 1
         }
 
-        return (histogram, VBox(rMin: rMin, rMax: rMax, gMin: gMin, gMax: gMax, bMin: bMin, bMax: bMax, histogram: histogram))
+        let vbox = VBox(rMin: rMin, rMax: rMax, gMin: gMin, gMax: gMax, bMin: bMin, bMax: bMax, histogram: histogram)
+        return (histogram, vbox)
     }
 
     private static func applyMedianCut(with histogram: [Int], vbox: VBox) -> [VBox] {
-        guard vbox.getCount() > 1 else {
-            return vbox.getCount() == 0 ? [] : [vbox]
+        guard vbox.getCount() != 0 else {
+            return []
         }
 
+        // only one pixel, no split
+        guard vbox.getCount() != 1 else {
+            return [vbox]
+        }
+
+        // Find the partial sum arrays along the selected axis.
         var total = 0
-        var partialSum = [Int](repeating: -1, count: vboxLength)
+        var partialSum = [Int](repeating: -1, count: vboxLength) // -1 = not set / 0 = 0
+
         let axis = vbox.widestColorChannel()
-
         switch axis {
         case .r:
-            for r in vbox.rRange() {
-                total += accumulateHistogram(r, vbox: vbox, axis: .r, histogram: histogram); partialSum[r - Int(vbox.rMin)] = total
-            }
-        case .g:
-            for g in vbox.gRange() {
-                total += accumulateHistogram(g, vbox: vbox, axis: .g, histogram: histogram); partialSum[g - Int(vbox.gMin)] = total
-            }
-        case .b:
-            for b in vbox.bRange() {
-                total += accumulateHistogram(b, vbox: vbox, axis: .b, histogram: histogram); partialSum[b - Int(vbox.bMin)] = total
-            }
-        }
-
-        let splitPoint = findSplitPoint(partialSum: partialSum, total: total)
-        let (leftBox, rightBox) = splitVBox(vbox: vbox, splitPoint: UInt8(splitPoint), axis: axis)
-
-        return [leftBox, rightBox]
-    }
-
-    private static func accumulateHistogram(_ value: Int, vbox: VBox, axis: ColorChannel, histogram: [Int]) -> Int {
-        vbox.gRange().reduce(0) { acc, g in
-            acc + vbox.bRange().reduce(0) { acc, b in
-                let index: Int = switch axis {
-                case .r: MMCQ.makeColorIndexOf(red: value, green: g, blue: b)
-                case .g: MMCQ.makeColorIndexOf(red: value, green: value, blue: b)
-                case .b: MMCQ.makeColorIndexOf(red: value, green: g, blue: value)
+            for i in vbox.rRange {
+                var sum = 0
+                for j in vbox.gRange {
+                    for k in vbox.bRange {
+                        let index = MMCQ.makeColorIndexOf(red: i, green: j, blue: k)
+                        sum += histogram[index]
+                    }
                 }
-                return acc + histogram[index]
+                total += sum
+                partialSum[i] = total
+            }
+        case .g:
+            for i in vbox.gRange {
+                var sum = 0
+                for j in vbox.rRange {
+                    for k in vbox.bRange {
+                        let index = MMCQ.makeColorIndexOf(red: j, green: i, blue: k)
+                        sum += histogram[index]
+                    }
+                }
+                total += sum
+                partialSum[i] = total
+            }
+        case .b:
+            for i in vbox.bRange {
+                var sum = 0
+                for j in vbox.rRange {
+                    for k in vbox.gRange {
+                        let index = MMCQ.makeColorIndexOf(red: j, green: k, blue: i)
+                        sum += histogram[index]
+                    }
+                }
+                total += sum
+                partialSum[i] = total
             }
         }
-    }
 
-    private static func findSplitPoint(partialSum: [Int], total: Int) -> Int {
-        for i in 0 ..< partialSum.count {
-            if partialSum[i] > total / 2 {
-                return i
-            }
+        var lookAheadSum = [Int](repeating: -1, count: vboxLength) // -1 = not set / 0 = 0
+        for (i, sum) in partialSum.enumerated() where sum != -1 {
+            lookAheadSum[i] = total - sum
         }
-        return partialSum.count - 1
+
+        return cut(by: axis, vbox: vbox, partialSum: partialSum, lookAheadSum: lookAheadSum, total: total)
     }
 
-    private static func splitVBox(vbox: VBox, splitPoint: UInt8, axis: ColorChannel) -> (VBox, VBox) {
-        let leftBox: VBox, rightBox: VBox
+    private static func cut(by axis: ColorChannel, vbox: VBox, partialSum: [Int], lookAheadSum: [Int], total: Int) -> [VBox] {
+        let vboxMin: Int
+        let vboxMax: Int
 
         switch axis {
         case .r:
-            leftBox = VBox(rMin: vbox.rMin, rMax: UInt8(vbox.rMin + splitPoint), gMin: vbox.gMin, gMax: vbox.gMax, bMin: vbox.bMin, bMax: vbox.bMax, histogram: vbox.histogram)
-            rightBox = VBox(rMin: UInt8(vbox.rMin + splitPoint + 1), rMax: vbox.rMax, gMin: vbox.gMin, gMax: vbox.gMax, bMin: vbox.bMin, bMax: vbox.bMax, histogram: vbox.histogram)
+            vboxMin = Int(vbox.rMin)
+            vboxMax = Int(vbox.rMax)
         case .g:
-            leftBox = VBox(rMin: vbox.rMin, rMax: vbox.rMax, gMin: vbox.gMin, gMax: UInt8(vbox.gMin + splitPoint), bMin: vbox.bMin, bMax: vbox.bMax, histogram: vbox.histogram)
-            rightBox = VBox(rMin: vbox.rMin, rMax: vbox.rMax, gMin: UInt8(vbox.gMin + splitPoint + 1), gMax: vbox.gMax, bMin: vbox.bMin, bMax: vbox.bMax, histogram: vbox.histogram)
+            vboxMin = Int(vbox.gMin)
+            vboxMax = Int(vbox.gMax)
         case .b:
-            leftBox = VBox(rMin: vbox.rMin, rMax: vbox.rMax, gMin: vbox.gMin, gMax: vbox.gMax, bMin: vbox.bMin, bMax: UInt8(vbox.bMin + splitPoint), histogram: vbox.histogram)
-            rightBox = VBox(rMin: vbox.rMin, rMax: vbox.rMax, gMin: vbox.gMin, gMax: vbox.gMax, bMin: UInt8(vbox.bMin + splitPoint + 1), bMax: vbox.bMax, histogram: vbox.histogram)
+            vboxMin = Int(vbox.bMin)
+            vboxMax = Int(vbox.bMax)
         }
 
-        return (leftBox, rightBox)
+        for i in vboxMin ... vboxMax where partialSum[i] > total / 2 {
+            let vbox1 = VBox(vbox: vbox)
+            let vbox2 = VBox(vbox: vbox)
+
+            let left = i - vboxMin
+            let right = vboxMax - i
+
+            var d2: Int = if left <= right {
+                min(vboxMax - 1, i + right / 2)
+            } else {
+                // 2.0 and cast to int is necessary to have the same
+                // behaviour as in JavaScript
+                max(vboxMin, Int(Double(i - 1) - Double(left) / 2.0))
+            }
+
+            // avoid 0-count
+            while d2 < 0 || partialSum[d2] <= 0 {
+                d2 += 1
+            }
+            var count2 = lookAheadSum[d2]
+            while count2 == 0, d2 > 0, partialSum[d2 - 1] > 0 {
+                d2 -= 1
+                count2 = lookAheadSum[d2]
+            }
+
+            // set dimensions
+            switch axis {
+            case .r:
+                vbox1.rMax = UInt8(d2)
+                vbox2.rMin = UInt8(d2 + 1)
+            case .g:
+                vbox1.gMax = UInt8(d2)
+                vbox2.gMin = UInt8(d2 + 1)
+            case .b:
+                vbox1.bMax = UInt8(d2)
+                vbox2.bMin = UInt8(d2 + 1)
+            }
+
+            return [vbox1, vbox2]
+        }
+
+        fatalError("VBox can't be cut")
     }
 
-    public static func quantize(pixels: [UInt8], colorCount: Int, quality: Int = 10, ignoreWhite: Bool = true) -> MMCQ.ColorMap {
-        var (histogram, initialVBox) = makeHistogramAndVBox(from: pixels, quality: quality, ignoreWhite: ignoreWhite)
-        var vboxPriorityQueue: [VBox] = [initialVBox]
-
-        while vboxPriorityQueue.count < colorCount {
-            vboxPriorityQueue.sort { $0.getVolume() > $1.getVolume() }
-            guard let vbox = vboxPriorityQueue.popLast() else { break }
-            vboxPriorityQueue.append(contentsOf: applyMedianCut(with: histogram, vbox: vbox))
+    static func quantize(_ pixels: [UInt8], quality: Int, ignoreWhite: Bool, maxColors: Int) -> ColorMap? {
+        // short-circuit
+        guard !pixels.isEmpty, maxColors > 1, maxColors <= 256 else {
+            return nil
         }
 
-        let colorMap = ColorMap()
-        vboxPriorityQueue.forEach { colorMap.push($0) }
+        // get the histogram and the beginning vbox from the colors
+        let (histogram, vbox) = makeHistogramAndVBox(from: pixels, quality: quality, ignoreWhite: ignoreWhite)
 
+        // priority queue
+        var pq = [vbox]
+
+        // Round up to have the same behaviour as in JavaScript
+        let target = Int(ceil(fractionByPopulation * Double(maxColors)))
+
+        // first set of colors, sorted by population
+        iterate(over: &pq, comparator: compareByCount, target: target, histogram: histogram)
+
+        // Re-sort by the product of pixel occupancy times the size in color space.
+        pq.sort(by: compareByProduct)
+
+        // next set - generate the median cuts using the (npix * vol) sorting.
+        iterate(over: &pq, comparator: compareByProduct, target: maxColors - pq.count, histogram: histogram)
+
+        // Reverse to put the highest elements first into the color map
+        pq = pq.reversed()
+
+        // calculate the actual colors
+        let colorMap = ColorMap()
+        pq.forEach { colorMap.push($0) }
         return colorMap
+    }
+
+    // Inner function to do the iteration.
+    private static func iterate(over queue: inout [VBox], comparator: (VBox, VBox) -> Bool, target: Int, histogram: [Int]) {
+        var color = 1
+
+        for _ in 0 ..< maxIterations {
+            guard let vbox = queue.last else {
+                return
+            }
+
+            if vbox.getCount() == 0 {
+                queue.sort(by: comparator)
+                continue
+            }
+            queue.removeLast()
+
+            // do the cut
+            let vboxes = applyMedianCut(with: histogram, vbox: vbox)
+            queue.append(vboxes[0])
+            if vboxes.count == 2 {
+                queue.append(vboxes[1])
+                color += 1
+            }
+            queue.sort(by: comparator)
+
+            if color >= target {
+                return
+            }
+        }
+    }
+
+    private static func compareByCount(_ a: VBox, _ b: VBox) -> Bool {
+        a.getCount() < b.getCount()
+    }
+
+    private static func compareByProduct(_ a: VBox, _ b: VBox) -> Bool {
+        let aCount = a.getCount()
+        let bCount = b.getCount()
+        let aVolume = a.getVolume()
+        let bVolume = b.getVolume()
+
+        if aCount == bCount {
+            // If count is 0 for both (or the same), sort by volume
+            return aVolume < bVolume
+        } else {
+            // Otherwise sort by products
+            let aProduct = Int64(aCount) * Int64(aVolume)
+            let bProduct = Int64(bCount) * Int64(bVolume)
+            return aProduct < bProduct
+        }
     }
 }

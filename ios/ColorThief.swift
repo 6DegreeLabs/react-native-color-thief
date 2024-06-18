@@ -80,10 +80,7 @@ public enum ColorThief {
         guard let pixels = makeBytes(from: image) else {
             return nil
         }
-        let colorMap = MMCQ.quantize(pixels: pixels,
-                                     colorCount: colorCount,
-                                     quality: quality,
-                                     ignoreWhite: ignoreWhite)
+        let colorMap = MMCQ.quantize(pixels, quality: quality, ignoreWhite: ignoreWhite, maxColors: colorCount)
         return colorMap
     }
 
