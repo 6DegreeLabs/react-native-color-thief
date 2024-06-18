@@ -34,22 +34,16 @@ public class RNColorThief: NSObject {
                          reject: @escaping RCTPromiseRejectBlock) {
         Task {
             guard let image = await getUIImage(from: source) else {
-                DispatchQueue.main.async {
-                    reject("Error", "Error getting image", nil)
-                }
+                reject("Error", "Error getting image", nil)
                 return
             }
 
             guard let dominantColor = ColorThief.getColor(from: image, quality: quality, ignoreWhite: ignoreWhite) else {
-                DispatchQueue.main.async {
-                    reject("Error", "Error getting dominant color", nil)
-                }
+                reject("Error", "Error getting dominant color", nil)
                 return
             }
 
-            DispatchQueue.main.async {
-                resolve(self.getRGBDict(from: dominantColor))
-            }
+            resolve(self.getRGBDict(from: dominantColor))
         }
     }
 
@@ -75,22 +69,16 @@ public class RNColorThief: NSObject {
                            reject: @escaping RCTPromiseRejectBlock) {
         Task {
             guard let image = await getUIImage(from: source) else {
-                DispatchQueue.main.async {
-                    reject("Error", "Error getting image", nil)
-                }
+                reject("Error", "Error getting image", nil)
                 return
             }
 
             guard let palette = ColorThief.getPalette(from: image, colorCount: colorCount, quality: quality, ignoreWhite: ignoreWhite) else {
-                DispatchQueue.main.async {
-                    reject("Error", "Error getting palette", nil)
-                }
+                reject("Error", "Error getting palette", nil)
                 return
             }
 
-            DispatchQueue.main.async {
-                resolve(palette.map { self.getRGBDict(from: $0) })
-            }
+            resolve(palette.map { self.getRGBDict(from: $0) })
         }
     }
 
