@@ -88,7 +88,8 @@ public class RNColorThief: NSObject {
      ========================
      */
     private func getUIImage(from path: String) async -> UIImage? {
-        guard let imageURL = URL(string: path) else {
+        guard let endcodedPath = path.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
+              let imageURL = URL(string: endcodedPath) else {
             return nil
         }
 
