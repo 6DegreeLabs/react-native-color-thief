@@ -23,7 +23,6 @@ import UIKit
 /// MMCQ (modified median cut quantization) algorithm from
 /// the Leptonica library (http://www.leptonica.com/).
 open class MMCQ {
-
     // Use only upper 5 bits of 8 bits
     private static let signalBits = 5
     private static let rightShift = 8 - signalBits
@@ -41,7 +40,7 @@ open class MMCQ {
     ///   - blue: the blue value
     /// - Returns: the color index
     static func makeColorIndexOf(red: Int, green: Int, blue: Int) -> Int {
-        return (red << (2 * signalBits)) + (green << signalBits) + blue
+        (red << (2 * signalBits)) + (green << signalBits) + blue
     }
 
     public struct Color {
@@ -56,7 +55,7 @@ open class MMCQ {
         }
 
         public func makeUIColor() -> UIColor {
-            return UIColor(red: CGFloat(r) / CGFloat(255), green: CGFloat(g) / CGFloat(255), blue: CGFloat(b) / CGFloat(255), alpha: CGFloat(1))
+            UIColor(red: CGFloat(r) / CGFloat(255), green: CGFloat(g) / CGFloat(255), blue: CGFloat(b) / CGFloat(255), alpha: CGFloat(1))
         }
     }
 
@@ -68,7 +67,6 @@ open class MMCQ {
 
     /// 3D color space box.
     class VBox {
-
         var rMin: UInt8
         var rMax: UInt8
         var gMin: UInt8
@@ -93,33 +91,33 @@ open class MMCQ {
         }
 
         init(vbox: VBox) {
-            self.rMin = vbox.rMin
-            self.rMax = vbox.rMax
-            self.gMin = vbox.gMin
-            self.gMax = vbox.gMax
-            self.bMin = vbox.bMin
-            self.bMax = vbox.bMax
-            self.histogram = vbox.histogram
+            rMin = vbox.rMin
+            rMax = vbox.rMax
+            gMin = vbox.gMin
+            gMax = vbox.gMax
+            bMin = vbox.bMin
+            bMax = vbox.bMax
+            histogram = vbox.histogram
         }
 
         func makeRange(min: UInt8, max: UInt8) -> CountableRange<Int> {
             if min <= max {
-                return Int(min) ..< Int(max + 1)
+                Int(min) ..< Int(max + 1)
             } else {
-                return Int(max) ..< Int(max)
+                Int(max) ..< Int(max)
             }
         }
 
-        var rRange: CountableRange<Int> { return makeRange(min: rMin, max: rMax) }
-        var gRange: CountableRange<Int> { return makeRange(min: gMin, max: gMax) }
-        var bRange: CountableRange<Int> { return makeRange(min: bMin, max: bMax) }
+        var rRange: CountableRange<Int> { makeRange(min: rMin, max: rMax) }
+        var gRange: CountableRange<Int> { makeRange(min: gMin, max: gMax) }
+        var bRange: CountableRange<Int> { makeRange(min: bMin, max: bMax) }
 
         /// Get 3 dimensional volume of the color space
         ///
         /// - Parameter force: force recalculate
         /// - Returns: the volume
         func getVolume(forceRecalculate force: Bool = false) -> Int {
-            if let volume = volume, !force {
+            if let volume, !force {
                 return volume
             } else {
                 let volume = (Int(rMax) - Int(rMin) + 1) * (Int(gMax) - Int(gMin) + 1) * (Int(bMax) - Int(bMin) + 1)
@@ -133,7 +131,7 @@ open class MMCQ {
         /// - Parameter force: force recalculate
         /// - Returns: the volume
         func getCount(forceRecalculate force: Bool = false) -> Int {
-            if let count = count, !force {
+            if let count, !force {
                 return count
             } else {
                 var count = 0
@@ -151,7 +149,7 @@ open class MMCQ {
         }
 
         func getAverage(forceRecalculate force: Bool = false) -> Color {
-            if let average = average, !force {
+            if let average, !force {
                 return average
             } else {
                 var ntot = 0
@@ -204,12 +202,10 @@ open class MMCQ {
                 return .b
             }
         }
-
     }
 
     /// Color map.
     open class ColorMap {
-
         var vboxes = [VBox]()
 
         func push(_ vbox: VBox) {
@@ -217,7 +213,7 @@ open class MMCQ {
         }
 
         open func makePalette() -> [Color] {
-            return vboxes.map { $0.getAverage() }
+            vboxes.map { $0.getAverage() }
         }
 
         open func makeNearestColor(to color: Color) -> Color {
@@ -258,7 +254,7 @@ open class MMCQ {
             let r = pixels[i * 4 + 3]
 
             // If pixel is not mostly opaque or white
-            guard a >= 125 && !(ignoreWhite && r > 250 && g > 250 && b > 250) else {
+            guard a >= 125, !(ignoreWhite && r > 250 && g > 250 && b > 250) else {
                 continue
             }
 
@@ -368,13 +364,12 @@ open class MMCQ {
             let left = i - vboxMin
             let right = vboxMax - i
 
-            var d2: Int
-            if left <= right {
-                d2 = min(vboxMax - 1, i + right / 2)
+            var d2: Int = if left <= right {
+                min(vboxMax - 1, i + right / 2)
             } else {
                 // 2.0 and cast to int is necessary to have the same
                 // behaviour as in JavaScript
-                d2 = max(vboxMin, Int(Double(i - 1) - Double(left) / 2.0))
+                max(vboxMin, Int(Double(i - 1) - Double(left) / 2.0))
             }
 
             // avoid 0-count
@@ -382,7 +377,7 @@ open class MMCQ {
                 d2 += 1
             }
             var count2 = lookAheadSum[d2]
-            while count2 == 0 && d2 > 0 && partialSum[d2 - 1] > 0 {
+            while count2 == 0, d2 > 0, partialSum[d2 - 1] > 0 {
                 d2 -= 1
                 count2 = lookAheadSum[d2]
             }
@@ -408,7 +403,7 @@ open class MMCQ {
 
     static func quantize(_ pixels: [UInt8], quality: Int, ignoreWhite: Bool, maxColors: Int) -> ColorMap? {
         // short-circuit
-        guard !pixels.isEmpty && maxColors > 1 && maxColors <= 256 else {
+        guard !pixels.isEmpty, maxColors > 1, maxColors <= 256 else {
             return nil
         }
 
@@ -470,7 +465,7 @@ open class MMCQ {
     }
 
     private static func compareByCount(_ a: VBox, _ b: VBox) -> Bool {
-        return a.getCount() < b.getCount()
+        a.getCount() < b.getCount()
     }
 
     private static func compareByProduct(_ a: VBox, _ b: VBox) -> Bool {
@@ -489,5 +484,4 @@ open class MMCQ {
             return aProduct < bProduct
         }
     }
-
 }
