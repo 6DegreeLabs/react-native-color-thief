@@ -1,6 +1,6 @@
 {
   "name": "@applicaster/react-native-color-thief",
-  "version": "0.3.13",
+  "version": "0.3.14",
   "description": "color thief for react-native",
   "main": "index.js",
   "scripts": {
