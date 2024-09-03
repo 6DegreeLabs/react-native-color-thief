@@ -16,8 +16,8 @@
   "title": "React Native Color Thief",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/korifey91/react-native-color-thief.git",
-    "baseUrl": "https://github.com/korifey91/react-native-color-thief"
+    "url": "git+https://github.com/6DegreeLabs/react-native-color-thief.git",
+    "baseUrl": "https://github.com/6DegreeLabs/react-native-color-thief"
   },
   "author": {
     "name": "Likewise, Inc."
